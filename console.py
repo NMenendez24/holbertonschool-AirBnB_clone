@@ -13,27 +13,29 @@ from models.place import Place
 from models.review import Review
 
 
-class HBNBCommand(cmd.Cmd)
+class HBNBCommand(cmd.Cmd):
     """class cmd"""
-
     prompt = '(hbnb)'
-    new_classes = ['BaseModel', 'Amenity', 'City', 'Place', 'Review',
-                 'State', 'User']
-
-
-    def do_quit(self, arg)
+    new_classes = ['BaseModel', 'Amenity', 'City', 'Place',
+    'Review', 'State', 'User']
+    
+    
+    def do_quit(self, arg):
         """Quit to exit the program"""
     return True
 
-    def do_EOF(self, arg)
+
+    def do_EOF(self, arg):
         """EOF to exit the program"""
     return True
 
-    def emptyline(self)
+
+    def emptyline(self):
         """empty line"""
     pass
 
-    def do_create(self, arg)
+
+    def do_create(self, arg):
         """creates a new class"""
         if len(line) == 0:
             print("** class name missing **")
@@ -44,14 +46,13 @@ class HBNBCommand(cmd.Cmd)
             inst.save()
             print(inst.id)
 
+
     def do_show(self, line):
         """shows the string representation of an instance"""
         if len(line) == 0:
             print("** class name missing **")
             return
-
         args = line.split() 
-
         if args[0] not in HBNBCommand.new_classes:
             print("** class doesn't exist **")
             return
@@ -82,6 +83,7 @@ class HBNBCommand(cmd.Cmd)
             storage.all().pop(names)
             storage.save()
 
+
     def do_all(self, arg):
         """
         Prints all string representation of all instances
@@ -92,11 +94,12 @@ class HBNBCommand(cmd.Cmd)
             print(obj)
         else:
             if line not in HBNBCommand.new_classes:
-            print("** class doesn't exist **")
+                ("** class doesn't exist **")
         else:
-            obj = [str(obj) for key, obj in storage.all().items()
+        obj = [str(obj) for key, obj in storage.all().items()
                    if type(obj).__name__ == line]
-            print(obj)
+        print(obj)
+
 
     def do_update(self, arg):
         """
@@ -125,6 +128,5 @@ class HBNBCommand(cmd.Cmd)
 
 
 
-        if __name__ == '__main__':
+if __name__ == '__main__':
     HBNBCommand().cmdloop()
-
