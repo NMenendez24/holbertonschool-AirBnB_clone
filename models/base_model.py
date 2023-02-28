@@ -14,7 +14,7 @@ class BaseModel():
                 if key == "created_at" or key == "updated_at":
                     setattr(self, key, datetime.fromisoformat(value))
                 elif key == "id":
-                    setattr(self, key, str(uuid4))
+                    setattr(self, key, str(value))
                 elif key != "__class__":
                     setattr(self, key, value)
         else:
