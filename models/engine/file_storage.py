@@ -1,11 +1,24 @@
 #!/usr/bin/python3
+"""Defines a class FileStorage and their methods"""
 import json
 import os
+from datetime import datetime
+from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class FileStorage:
+    """FileStorage Class"""
     __objects = {}
     __file_path = "file.json"
+    classes = {"BaseModel": BaseModel, "User": User, "State": State,
+               "City": City, "Amenity": Amenity, "Place": Place,
+               "Review": Review}
 
     def all(self):
         """returns the dictionary __objects"""
@@ -17,15 +30,17 @@ class FileStorage:
 
     def save(self):
         """serializes __objects to the JSON file"""
-        objs = self.__objects
-        dump = {key: value.to_dict() for key, value in objs.items()}
+        to_dump = {key: value.to_dict()
+                   for key, value in self.__objects.items()}
         with open(self.__file_path, mode='w', encoding='utf-8') as f:
-            json.dump(dump, f)
+            json.dump(to_dump, f)
 
     def reload(self):
         """deserializes the JSON file to __objects"""
         if os.path.exists(self.__file_path):
             with open(self.__file_path, "r", encoding='utf-8') as f:
-                reloaded = json.load(f)
-            for key, value in reloaded.items():
-                FileStorage.__objects = reloaded
+                loaded = json.load(f)
+            self.__objects = {}
+            for key, value in loaded.items():
+                key_class = key.split(".")[0]
+                self.__objects[key] = self.classes[key_class](**value)

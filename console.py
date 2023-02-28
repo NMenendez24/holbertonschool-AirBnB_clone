@@ -17,42 +17,37 @@ class HBNBCommand(cmd.Cmd):
     """class cmd"""
     prompt = '(hbnb)'
     new_classes = ['BaseModel', 'Amenity', 'City', 'Place',
-    'Review', 'State', 'User']
-    
-    
+                   'Review', 'State', 'User']
+
     def do_quit(self, arg):
         """Quit to exit the program"""
-    return True
-
+        return True
 
     def do_EOF(self, arg):
         """EOF to exit the program"""
-    return True
-
+        return True
 
     def emptyline(self):
         """empty line"""
-    pass
-
+        pass
 
     def do_create(self, arg):
         """creates a new class"""
-        if len(line) == 0:
+        if len(arg) == 0:
             print("** class name missing **")
-        elif line not in self.new_classes:
+        elif arg not in self.new_classes:
             print("** class doesn't exist **")
         else:
-            inst = eval(line)()
+            inst = eval(arg)()
             inst.save()
             print(inst.id)
-
 
     def do_show(self, line):
         """shows the string representation of an instance"""
         if len(line) == 0:
             print("** class name missing **")
             return
-        args = line.split() 
+        args = line.split()
         if args[0] not in HBNBCommand.new_classes:
             print("** class doesn't exist **")
             return
@@ -65,10 +60,8 @@ class HBNBCommand(cmd.Cmd):
             names = f"{args[0]}.{args[1]}"
             print(storage.all()[names])
 
-
     def do_destroy(self, arg):
         """deletes an instance based on the classname"""
-        
         args = arg.split()
         if arg == "":
             print("** class name missing **")
@@ -83,30 +76,26 @@ class HBNBCommand(cmd.Cmd):
             storage.all().pop(names)
             storage.save()
 
-
     def do_all(self, arg):
         """
         Prints all string representation of all instances
         based or not on the class name
         """
-        if line == "":
+        if arg == "":
             obj = [str(obj) for key, obj in storage.all().items()]
             print(obj)
+        elif arg not in HBNBCommand.new_classes:
+            print("** class doesn't exist **")
         else:
-            if line not in HBNBCommand.new_classes:
-                ("** class doesn't exist **")
-        else:
-        obj = [str(obj) for key, obj in storage.all().items()
-                   if type(obj).__name__ == line]
-        print(obj)
-
+            obj = [str(obj) for key, obj in storage.all().items()
+                   if type(obj).__name__ == arg]
+            print(obj)
 
     def do_update(self, arg):
         """
         Updates an instance based on the class name and id
         by adding or updating attribute
         """
-        
         args = arg.split()
         if len(args) == 0:
             print("** class name missing **")
@@ -125,7 +114,6 @@ class HBNBCommand(cmd.Cmd):
             obj = storage.all()[name]
             setattr(obj, args[2], args[3])
             obj.save()
-
 
 
 if __name__ == '__main__':
